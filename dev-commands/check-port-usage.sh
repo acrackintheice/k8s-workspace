@@ -1,0 +1,1 @@
+sudo lsof -i -P -n | grep <port number>

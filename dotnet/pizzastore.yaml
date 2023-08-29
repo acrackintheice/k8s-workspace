@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pizzastore
+  labels:
+    app: pizzastore
+    istio.io/rev: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pizzastore
+  namespace: pizzastore
+  labels:
+    app: pizzastore
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pizzastore
+  template:
+    metadata:
+      labels:
+        app: pizzastore
+    spec:
+      containers:
+      - name: pizzastore
+        image: acrackintheice/pizzastore:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 200m
+          limits: 
+            memory: 1Gi
+            cpu: 500m
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: pizzastore
+  namespace: pizzastore
+spec:
+  type: NodePort
+  selector:
+    app: pizzastore
+  ports:
+  - name: http
+    nodePort: 30001
+    port: 80

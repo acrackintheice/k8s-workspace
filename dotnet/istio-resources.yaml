@@ -1,0 +1,25 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: pizzastore-route
+  namespace: pizzastore
+spec:
+  hosts:
+  - pizzastore.pizzastore.svc.cluster.local
+  http:
+  - name: "pizzastore-prefix"
+    route:
+    - destination:
+        host: pizzastore.pizzastore.svc.cluster.local
+# ---
+# apiVersion: security.istio.io/v1beta1
+# kind: AuthorizationPolicy
+# metadata:
+#   name: pizzastore
+#   namespace: pizzastore
+# spec:
+#   action: ALLOW
+#   rules:
+#   - from:
+#     - source:
+#         remoteIpBlocks: ["10.244.0.22","10.244.0.14","10.244.0.18"]

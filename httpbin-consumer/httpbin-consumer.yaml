@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: httpbin-consumer
+  labels:
+    istio.io/rev: default
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-consumer
+  namespace: httpbin-consumer
+  labels:
+    app: httpbin-consumer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin-consumer
+  template:
+    metadata:
+      labels:
+        app: httpbin-consumer
+    spec:
+      containers:
+      - name: httpbin-consumer
+        image: acrackintheice/httpbin-consumer
+        env:
+          - name: "URL"
+            value: "http://httpbin.httpbin/status/200"
+          - name: POD_IP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+        resources:
+          limits: 
+            memory: 1Gi
+            cpu: 500m
+---
